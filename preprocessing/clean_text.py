@@ -8,19 +8,28 @@ from nltk.corpus import stopwords
 
 
 # ======================
-# Download NLTK resources
+# Download NLTK resources if missing
 # ======================
 
+try:
 
-nlp = spacy.load(
-    "en_core_web_sm"
-)
-
-stop_words = set(
-    stopwords.words(
-        "english"
+    stop_words = set(
+        stopwords.words(
+            "english"
+        )
     )
-)
+
+except LookupError:
+
+    nltk.download(
+        "stopwords"
+    )
+
+    stop_words = set(
+        stopwords.words(
+            "english"
+        )
+    )
 
 
 # ======================
@@ -28,13 +37,17 @@ stop_words = set(
 # ======================
 
 try:
+
     nlp = spacy.load(
         "en_core_web_sm"
     )
+
 except:
+
     os.system(
         "python -m spacy download en_core_web_sm"
     )
+
     nlp = spacy.load(
         "en_core_web_sm"
     )
@@ -46,26 +59,11 @@ except:
 
 custom_stopwords = {
 
-    "im",
-    "ive",
-    "id",
-    "dont",
-    "cant",
-    "didnt",
-    "doesnt",
-    "isnt",
-    "wasnt",
-    "thing",
-    "things",
-    "people",
-    "friend",
-    "know",
-    "really",
-    "one",
-    "today",
-    "day",
-    "year"
-
+    "im","ive","id","dont","cant",
+    "didnt","doesnt","isnt","wasnt",
+    "thing","things","people",
+    "friend","know","really",
+    "one","today","day","year"
 }
 
 stop_words.update(
@@ -74,74 +72,90 @@ stop_words.update(
 
 
 # ======================
-# Text cleaning
+# Text Cleaning
 # ======================
 
 def clean_text(text):
+
     if not isinstance(
         text,
         str
     ):
+
         return ""
 
 
-    text = text.lower()
+    text=text.lower()
 
-
-    # Remove URLs
-    text = re.sub(
+    text=re.sub(
         r"http\S+",
         "",
         text
     )
 
-
-    # Remove usernames
-    text = re.sub(
+    text=re.sub(
         r"@\w+",
         "",
         text
     )
 
-
-    # Remove emojis
-    text = emoji.replace_emoji(
+    text=emoji.replace_emoji(
         text,
         replace=""
     )
 
-
-    # Remove special characters
-    text = re.sub(
+    text=re.sub(
         r"[^a-zA-Z ]",
         "",
         text
     )
 
+    text=re.sub(
+        r"\s+",
+        " ",
+        text
+    ).strip()
 
-    # Remove extra spaces
-    text = re.sub(r"\s+"," ",text).strip()
 
     if text=="":
+
         return ""
 
-    doc = nlp(text)
+
+    doc=nlp(
+        text
+    )
+
     words=[]
 
     for token in doc:
+
         if (
+
             token.text not in stop_words
+
             and
+
             token.pos_ in [
+
                 "NOUN",
                 "ADJ",
                 "VERB"
+
             ]
+
             and
-            len(token.text)>2
+
+            len(
+                token.text
+            )>2
+
         ):
 
-            words.append(token.lemma_)
+            words.append(
+                token.lemma_
+            )
+
 
     return " ".join(
         words
