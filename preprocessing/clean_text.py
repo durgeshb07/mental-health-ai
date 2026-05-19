@@ -11,23 +11,16 @@ from nltk.corpus import stopwords
 # Download NLTK resources
 # ======================
 
-try:
-    stop_words = set(
-        stopwords.words(
-            "english"
-        )
-    )
 
-except:
-    nltk.download(
-        "stopwords"
-    )
+nlp = spacy.load(
+    "en_core_web_sm"
+)
 
-    stop_words = set(
-        stopwords.words(
-            "english"
-        )
+stop_words = set(
+    stopwords.words(
+        "english"
     )
+)
 
 
 # ======================
