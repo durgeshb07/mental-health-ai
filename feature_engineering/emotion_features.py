@@ -2,14 +2,10 @@ import streamlit as st
 from transformers import pipeline
 
 
-# ======================
-# Cached emotion model
-# ======================
-
 @st.cache_resource
 def load_emotion_model():
 
-    model = pipeline(
+    return pipeline(
 
         "text-classification",
 
@@ -19,20 +15,16 @@ def load_emotion_model():
 
     )
 
-    return model
-
 
 emotion_model = load_emotion_model()
 
 
-# ======================
-# Detect emotions
-# ======================
-
 def detect_emotions(text):
 
     results = emotion_model(
+
         text
+
     )[0]
 
     emotions = {}
@@ -40,11 +32,12 @@ def detect_emotions(text):
     for item in results:
 
         emotions[
+
             item["label"]
+
         ] = round(
 
             item["score"],
-
             3
 
         )
