@@ -16,18 +16,11 @@ from feature_engineering.emotion_features import (
 # ======================
 
 def calculate_risk(text):
+    sentiment = get_sentiment(text)
 
-    sentiment = get_sentiment(
-        text
-    )
+    emotions = detect_emotions(text)
 
-    emotions = detect_emotions(
-        text
-    )
-
-    critical_matches = detect_critical(
-        text
-    )
+    critical_matches = detect_critical(text)
 
     risk = 0
 
@@ -37,7 +30,6 @@ def calculate_risk(text):
     # ======================
 
     if sentiment["label"]=="NEGATIVE":
-
         risk += 30
 
 
@@ -45,20 +37,11 @@ def calculate_risk(text):
     # Emotion contribution
     # ======================
 
-    sadness = emotions.get(
-        "sadness",
-        0
-    )
+    sadness = emotions.get("sadness",0)
 
-    fear = emotions.get(
-        "fear",
-        0
-    )
+    fear = emotions.get("fear",0)
 
-    anger = emotions.get(
-        "anger",
-        0
-    )
+    anger = emotions.get("anger",0)
 
     risk += sadness*30
     risk += fear*15
@@ -69,19 +52,13 @@ def calculate_risk(text):
     # Critical phrases
     # ======================
 
-    if len(
-        critical_matches
-    )>0:
-
+    if len(critical_matches)>0:
         risk += 40
 
 
     # Keep score within range
 
-    risk = min(
-        round(risk),
-        100
-    )
+    risk = min(round(risk),100)
 
 
     # ======================
@@ -89,28 +66,16 @@ def calculate_risk(text):
     # ======================
 
     if risk<30:
-
         level="LOW"
-
     elif risk<70:
-
         level="MEDIUM"
-
     else:
-
         level="HIGH"
 
-
     return {
-
         "risk_score":risk,
-
         "risk_level":level,
-
         "sentiment":sentiment,
-
         "emotions":emotions,
-
         "critical_matches":critical_matches
-
     }

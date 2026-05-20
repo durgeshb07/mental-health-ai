@@ -12,23 +12,15 @@ from nltk.corpus import stopwords
 # ======================
 
 try:
-
     stop_words = set(
-        stopwords.words(
-            "english"
-        )
+        stopwords.words("english")
     )
 
 except LookupError:
-
-    nltk.download(
-        "stopwords"
-    )
+    nltk.download("stopwords")
 
     stop_words = set(
-        stopwords.words(
-            "english"
-        )
+        stopwords.words("english")
     )
 
 
@@ -37,20 +29,12 @@ except LookupError:
 # ======================
 
 try:
-
-    nlp = spacy.load(
-        "en_core_web_sm"
-    )
+    nlp = spacy.load("en_core_web_sm")
 
 except:
+    os.system("python -m spacy download en_core_web_sm")
 
-    os.system(
-        "python -m spacy download en_core_web_sm"
-    )
-
-    nlp = spacy.load(
-        "en_core_web_sm"
-    )
+    nlp = spacy.load("en_core_web_sm")
 
 
 # ======================
@@ -66,9 +50,7 @@ custom_stopwords = {
     "one","today","day","year"
 }
 
-stop_words.update(
-    custom_stopwords
-)
+stop_words.update(custom_stopwords)
 
 
 # ======================
@@ -76,86 +58,42 @@ stop_words.update(
 # ======================
 
 def clean_text(text):
-
-    if not isinstance(
-        text,
-        str
-    ):
-
+    if not isinstance(text,str):
         return ""
-
 
     text=text.lower()
 
-    text=re.sub(
-        r"http\S+",
-        "",
-        text
-    )
+    text=re.sub(r"http\S+","",text)
 
-    text=re.sub(
-        r"@\w+",
-        "",
-        text
-    )
+    text=re.sub(r"@\w+","",text)
 
-    text=emoji.replace_emoji(
-        text,
-        replace=""
-    )
+    text=emoji.replace_emoji(text,replace="")
 
-    text=re.sub(
-        r"[^a-zA-Z ]",
-        "",
-        text
-    )
+    text=re.sub(r"[^a-zA-Z ]","",text)
 
-    text=re.sub(
-        r"\s+",
-        " ",
-        text
-    ).strip()
+    text=re.sub(r"\s+"," ",text).strip()
 
 
     if text=="":
-
         return ""
 
-
-    doc=nlp(
-        text
-    )
+    doc=nlp(text)
 
     words=[]
 
     for token in doc:
-
         if (
-
             token.text not in stop_words
-
             and
-
             token.pos_ in [
-
                 "NOUN",
                 "ADJ",
                 "VERB"
-
             ]
-
             and
-
-            len(
-                token.text
-            )>2
-
+            len(token.text)>2
         ):
-
-            words.append(
-                token.lemma_
-            )
-
+            words.append(token.lemma_)
 
     return " ".join(
         words

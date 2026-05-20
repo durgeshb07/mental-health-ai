@@ -11,15 +11,10 @@ critical_phrases = [
 
 
 def detect_critical(text):
-
     text = text.lower()
-
     matches=[]
-
     for phrase in critical_phrases:
-
         if phrase in text:
-
             matches.append(
                 phrase
             )

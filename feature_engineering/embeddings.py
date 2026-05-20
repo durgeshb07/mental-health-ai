@@ -10,11 +10,8 @@ from sentence_transformers import (
 
 @st.cache_resource
 def load_embedding_model():
-
     model = SentenceTransformer(
-
         "all-MiniLM-L6-v2"
-
     )
 
     return model
@@ -25,25 +22,13 @@ def load_embedding_model():
 # ======================
 
 class EmbeddingExtractor:
-
     def __init__(self):
-
         self.model = load_embedding_model()
 
-
-    def encode(
-
-        self,
-        texts
-
-    ):
-
+    def encode(self,texts):
         embeddings = self.model.encode(
-
             texts,
-
             convert_to_numpy=True
-
         )
 
         return embeddings

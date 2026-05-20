@@ -52,12 +52,7 @@ def explain_prediction(text):
                 contributions.append({
                     "Feature": word,
                     "Impact": round(
-                        random.uniform(
-                            0.4,
-                            0.9
-                        ),
-                        2
-                    )
+                        random.uniform(0.4,0.9),2)
                 })
 
     if len(contributions)==0:

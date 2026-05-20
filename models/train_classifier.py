@@ -69,19 +69,12 @@ from sklearn.preprocessing import LabelEncoder
 
 encoder = LabelEncoder()
 
-y = encoder.fit_transform(
-    df["status"]
-)
+y = encoder.fit_transform(df["status"])
 
 print("\nClasses found:")
 
-for i,label in enumerate(
-    encoder.classes_
-):
-
-    print(
-        f"{label} -> {i}"
-    )
+for i,label in enumerate(encoder.classes_):
+    print(f"{label} -> {i}")
 
 
 # ======================
@@ -94,24 +87,14 @@ from feature_engineering.embeddings import (
 
 extractor=EmbeddingExtractor()
 
-X=extractor.encode(
-    X_text.tolist()
-)
+X=extractor.encode(X_text.tolist())
 
 # ======================
 # Train/Test Split
 # ======================
 
 X_train,X_test,y_train,y_test=\
-train_test_split(
-
-    X,
-    y,
-
-    test_size=0.2,
-
-    random_state=42
-)
+train_test_split(X,y,test_size=0.2,random_state=42)
 
 # ======================
 # Linear SVM
@@ -123,23 +106,13 @@ model = LinearSVC(
     random_state=42
 )
 
-model.fit(
-    X_train,
-    y_train
-)
+model.fit(X_train,y_train)
 
-pred = model.predict(
-    X_test
-)
+pred = model.predict(X_test)
 
-accuracy = accuracy_score(
-    y_test,
-    pred
-)
+accuracy = accuracy_score(y_test,pred)
 
-print(
-    f"\nAccuracy: {accuracy:.4f}"
-)
+print(f"\nAccuracy: {accuracy:.4f}")
 
 # Classification Report
 
@@ -148,13 +121,9 @@ from sklearn.metrics import classification_report
 print("\nClassification Report:\n")
 
 print(
-
     classification_report(
-
         y_test,
-
         pred
-
     )
 
 )
@@ -165,20 +134,10 @@ print(
 
 import os
 
-os.makedirs(
-    "models/trained",
-    exist_ok=True
-)
+os.makedirs("models/trained",exist_ok=True)
 
-with open(
-    "models/trained/risk_classifier.pkl",
-    "wb"
-) as f:
-
-    pickle.dump(
-        model,
-        f
-    )
+with open("models/trained/risk_classifier.pkl","wb") as f:
+    pickle.dump(model,f)
 
 print(
     "Model saved successfully"
